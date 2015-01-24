@@ -15,6 +15,29 @@ public class Util{
 		return (float)Math.Abs(Math.Sqrt(Math.Pow(a.x-b.x,2)+Math.Pow(a.y-b.y,2)+Math.Pow(a.z-b.z,2)));
 	}
 	
+	public static Vector3 vec_drp(Vector3 from, Vector3 to, float mlt) {
+		return new Vector3(
+			drp(from.x,to.x,mlt),
+			drp(from.y,to.y,mlt),
+			drp(from.z,to.z,mlt)
+		);
+	}
+	
+	public static float drp(float from, float to, float mlt) {
+		if (Math.Abs(to-from) < 0.01f) return to;
+		return from + (to-from)*mlt;
+	}
+	
+	public static void transform_set_euler_world(Transform t,Vector3 tar) {
+		Quaternion q = t.rotation;
+		q.eulerAngles = tar;
+		t.rotation = q;
+	}
+	
+	public static string vec_to_s(Vector3 v) {
+		return string.Format("({0},{1},{2})",v.x,v.y,v.z);
+	}
+	
 	public static Vector3 vec_sub(Vector3 a, Vector3 b) {
 		return new Vector3(a.x-b.x,a.y-b.y,a.z-b.z);
 	}
