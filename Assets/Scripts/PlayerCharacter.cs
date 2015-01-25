@@ -9,18 +9,26 @@ public class PlayerCharacter : MonoBehaviour {
 	[SerializeField] public GameObject _camera_anchor;
 	[SerializeField] public GameObject _model_anchor;
 	[SerializeField] public Rigidbody _body;
-	[SerializeField] public ViewTargetCollider _targeting_volume;
+	[SerializeField] private GameObject _center;
 	
 	[SerializeField] private Animation _character_animation;
 	public AnimationManager _animation;
 	
-	public void i_initialize() {
+	public void i_initialize(BattleGameEngine game) {
 		_animation = new AnimationManager(_character_animation);
 		_animation.add_anim("Idle",0.25f);
 		_animation.add_anim("Walk",1.75f);
 		_animation.add_anim("Walk_Left",1.75f);
 		_animation.add_anim("Walk_Right",1.75f);
 		_animation.play_anim("Idle");
+	}
+	
+	public Vector3 get_forward() {
+		return Util.vec_sub(_center.transform.position,_follow_camera.transform.position).normalized;
+	}
+	
+	public bool point_in_fov(Vector3 pos) {
+		return Vector3.Angle(get_forward(),Util.vec_sub(pos,_center.transform.position)) < 35;
 	}
 	
 	public void freeze() {

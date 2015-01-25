@@ -23,6 +23,16 @@ public class Util {
 		);
 	}
 	
+	public static GameObject proto_clone(GameObject proto) {
+		GameObject rtv = ((GameObject)UnityEngine.Object.Instantiate(proto));
+		rtv.transform.parent = proto.transform.parent;
+		rtv.transform.localScale = proto.transform.localScale;
+		rtv.transform.localPosition = proto.transform.localPosition;
+		rtv.transform.localRotation = proto.transform.localRotation;
+		rtv.SetActive(true);
+		return rtv;
+	}
+	
 	public static Vector3 sin_lerp_vec(Vector3 a, Vector3 b, float t) {
 		return new Vector3(sin_lerp(a.x,b.x,t),sin_lerp(a.y,b.y,t),sin_lerp(a.z,b.z,t));
 	}

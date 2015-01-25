@@ -4,7 +4,7 @@ using System.Collections;
 public class GenericSoldierEnemy : BaseEnemy {
 
 	[SerializeField] private Animation _unit_animation;
-	[SerializeField] private GameObject _turret;
+	[SerializeField] private GameObject _center_locator;
 	
 	public override void i_initialize(BattleGameEngine game) {
 		base.i_initialize(game);
@@ -25,5 +25,8 @@ public class GenericSoldierEnemy : BaseEnemy {
 		}
 		
 	}
+	
+	public override float get_reticule_scale() { return 0.5f; }
+	public override Vector3 get_center() { return _center_locator.transform.position; }
 
 }

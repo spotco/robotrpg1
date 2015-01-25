@@ -9,8 +9,8 @@ public class BattleGameEngine : MonoBehaviour {
 		CameraTransition
 	}
 	
-	private SceneRef _sceneref;
-	private BattleGameEngineMode _current_mode;
+	public SceneRef _sceneref;
+	public BattleGameEngineMode _current_mode;
 
 	public void i_initialize(SceneRef sceneref) {
 		_sceneref = sceneref;
@@ -19,7 +19,8 @@ public class BattleGameEngine : MonoBehaviour {
 		_sceneref._transition_camera.SetActive(false);
 		_sceneref._player._follow_camera.SetActive(true);
 		
-		_sceneref._player.i_initialize();
+		_sceneref._player.i_initialize(this);
+		_sceneref._ui.i_initialize(this);
 		
 		for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
 			BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
@@ -30,6 +31,7 @@ public class BattleGameEngine : MonoBehaviour {
 	}
 	
 	public void Update() {
+		_sceneref._ui.i_update(this);
 		if (_current_mode == BattleGameEngineMode.PlayerControl) {
 			_sceneref._player.i_update(this);
 			for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {

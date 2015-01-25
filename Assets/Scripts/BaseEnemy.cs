@@ -10,6 +10,9 @@ public class BaseEnemy : MonoBehaviour {
 	public virtual void i_update(BattleGameEngine game) {
 	}
 	
+	public virtual float get_reticule_scale() { return 1.0f; }
+	public virtual Vector3 get_center() { return Vector3.zero; }
+	
 	protected NavMeshAgent _navagent;
 	public void move_to(Vector3 pos) {
 		_navagent.SetDestination(pos);

@@ -8,6 +8,7 @@ public class SceneRef : MonoBehaviour {
 	[SerializeField] public GameObject _transition_camera;
 	[SerializeField] public GameObject _topdown_camera;
 	[SerializeField] public PlayerCharacter _player;
+	[SerializeField] public GameUI _ui;
 	
 	[SerializeField] private GameObject _enemies_container;
 	public List<BaseEnemy> _enemies;
