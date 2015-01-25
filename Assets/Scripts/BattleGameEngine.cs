@@ -48,17 +48,26 @@ public class BattleGameEngine : MonoBehaviour {
             }
 			
 		} else if (_current_mode == BattleGameEngineMode.CameraTransition) {
-			Vector3 transition_camera_pos = _sceneref._transition_camera.transform.position;
-			transition_camera_pos = Util.vec_drp(transition_camera_pos,_camera_transition_to_pos,0.1f);
-			_sceneref._transition_camera.transform.position = transition_camera_pos;
+			_sceneref._transition_camera.transform.position = Util.sin_lerp_vec(
+				_transition_from_camera.transform.position,
+				_transition_to_camera.transform.position,
+				_camera_transition_lerp_t
+			);
 			
-			float pct = Util.vec_dist(transition_camera_pos,_camera_transition_from_pos)/Util.vec_dist(_camera_transition_from_pos,_camera_transition_to_pos);
-			_sceneref._transition_camera.transform.rotation = Quaternion.Lerp(_camera_transition_from_rot,_camera_transition_to_rot,pct);
+			_sceneref._transition_camera.transform.rotation = Quaternion.Lerp(
+				_transition_from_camera.transform.rotation,
+				_transition_to_camera.transform.rotation,
+				Util.sin_lerp(0.0f,1.0f,_camera_transition_lerp_t)
+			);
 			
-			if (Util.vec_dist(transition_camera_pos,_camera_transition_to_pos) < 0.05f) {
+			_camera_transition_lerp_t += 0.025f;
+			if (_camera_transition_lerp_t >= 1) {
 				_current_mode = _target_camera_transition_mode;
-				_target_transition_camera.SetActive(true);
+				_transition_to_camera.SetActive(true);
 				_sceneref._transition_camera.SetActive(false);
+				if (_current_mode == BattleGameEngineMode.PlayerControl) {
+					freeze_game(false);
+				}
 			}
 		
 		
@@ -93,44 +102,59 @@ public class BattleGameEngine : MonoBehaviour {
 				RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));
 				for(int i_hit = 0; i_hit < hits.Length; i_hit++) {
 					RaycastHit itr_hit = hits[i_hit];
-					if (itr_hit.collider.gameObject.GetComponent<BaseEnemy>() != null) {
-						Debug.Log ("enemy click");
+					if (itr_hit.collider.gameObject.GetComponent<BaseEnemy>() != null) {						
 					} else if (itr_hit.collider.gameObject.GetComponent<PlayerCharacter>() != null) {
-						Debug.Log ("player click");
 					} else if (itr_hit.collider.gameObject.GetComponent<WorldTerrain>() != null) {
-						Debug.Log ("terrain click");
+						for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
+							BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
+							itr_enemy.move_to(new Vector3(itr_hit.point.x+Util.rand_range(-1.5f,1.5f),itr_hit.point.y,itr_hit.point.z+Util.rand_range(-1.5f,1.5f)));	
+						}
 					}
 				}
-            }
-            
-            
+            }            
 		}
 	}
 	
+	private void freeze_game(bool val) {
+		for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
+			BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
+			if (val) {
+				itr_enemy.freeze();
+			} else {
+				itr_enemy.unfreeze();
+			}	
+		}
+		if (val) {
+			_sceneref._player.freeze();
+		} else {
+			_sceneref._player.unfreeze();
+		}
+	}
+	
+	
+	private static float TACTICAL_MOVE_SCALE = 0.5f;
+	
 	private BattleGameEngineMode _target_camera_transition_mode = BattleGameEngineMode.PlayerControl;
-	private GameObject _target_transition_camera = null;
-	private Vector3 _camera_transition_to_pos = Vector3.zero, _camera_transition_from_pos = Vector3.zero;
-	private Quaternion _camera_transition_to_rot = Quaternion.identity, _camera_transition_from_rot = Quaternion.identity;
+	private GameObject _transition_to_camera = null, _transition_from_camera = null;
+	private float _camera_transition_lerp_t = 0;
+	
 	private void transition_to_mode(BattleGameEngineMode target_mode, GameObject from_camera, GameObject to_camera) {
 		_current_mode = BattleGameEngineMode.CameraTransition;
 		_target_camera_transition_mode = target_mode;
-		
+		_camera_transition_lerp_t = 0;
 		Vector3 to_camera_rotation = to_camera.transform.rotation.eulerAngles;
 		to_camera_rotation.y = from_camera.transform.rotation.eulerAngles.y;
 		Util.transform_set_euler_world(to_camera.transform,to_camera_rotation);
 		
-		_target_transition_camera = to_camera;
+		_transition_from_camera = from_camera;
+		_transition_to_camera = to_camera;
 		
 		_sceneref._transition_camera.transform.position = from_camera.transform.position;
 		Util.transform_set_euler_world(_sceneref._transition_camera.transform,from_camera.transform.rotation.eulerAngles);
 		
-		_camera_transition_from_pos = from_camera.transform.position;
-		_camera_transition_from_rot = from_camera.transform.rotation;
-		_camera_transition_to_pos = to_camera.transform.position;
-		_camera_transition_to_rot = to_camera.transform.rotation;
-		
 		_sceneref._player._follow_camera.SetActive(false);
 		_sceneref._topdown_camera.SetActive(false);
 		_sceneref._transition_camera.SetActive(true);
+		freeze_game(true);
 	}
 }

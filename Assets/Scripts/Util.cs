@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
+using System.Collections.Generic;
 
-
-public class Util{
+public class Util {
 	
 	public static System.Random rand = new System.Random();
 	
@@ -21,6 +21,24 @@ public class Util{
 			drp(from.y,to.y,mlt),
 			drp(from.z,to.z,mlt)
 		);
+	}
+	
+	public static Vector3 sin_lerp_vec(Vector3 a, Vector3 b, float t) {
+		return new Vector3(sin_lerp(a.x,b.x,t),sin_lerp(a.y,b.y,t),sin_lerp(a.z,b.z,t));
+	}
+	
+	public static Vector3 lerp_vec(Vector3 a, Vector3 b, float t) {
+		return new Vector3(lerp(a.x,b.x,t),lerp(a.y,b.y,t),lerp(a.z,b.z,t));
+	}
+	
+	public static float sin_lerp(float min, float max, float t) {
+		t = t > 1 ? 1 : t;
+		t = t < 0 ? 0 : t;
+		return Util.lerp(min,max, Mathf.Sin(t*Mathf.PI/2)/Mathf.Sin(Mathf.PI/2));
+	}
+	
+	public static float lerp(float a, float b, float t) {
+		return a + (b - a) * t;
 	}
 	
 	public static float drp(float from, float to, float mlt) {
@@ -139,6 +157,38 @@ public class Util{
 		ray = new Ray(point, direction);
 		hit = test.Raycast(ray, out hitInfo, direction.magnitude);
 		return !hit;
+	}
+}
+
+public class AnimationManager {
+	private Animation _animation;
+	private Dictionary<string,float> _animations_to_time = new Dictionary<string, float>();
+	public AnimationManager(Animation animation) {
+		this._animation = animation;
+		_animation.playAutomatically = true;
+		_animation.wrapMode = WrapMode.Loop;
+	}
+	public void add_anim(string name, float speed) {
+		_animations_to_time[name] = speed;
+		_animation[name].speed = speed;
+	}
+	public void play_anim(string name, float mult_speed = 1.0f) {
+		if (_animations_to_time.ContainsKey(name)) {
+			_animation[name].speed = mult_speed*_animations_to_time[name];
+			_animation.CrossFade(name);
+		} else {
+			Debug.LogError("anim does not contain "+name);
+		}
+	}
+	public void pause_anims() {
+		foreach(string key in _animations_to_time.Keys) {
+			_animation[key].speed = 0;
+		}
+	}
+	public void unpause_anims() {
+		foreach(string key in _animations_to_time.Keys) {
+			_animation[key].speed = _animations_to_time[key];
+		}
 	}
 }
 
