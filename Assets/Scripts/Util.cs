@@ -24,6 +24,7 @@ public class Util{
 	}
 	
 	public static float drp(float from, float to, float mlt) {
+		
 		if (Math.Abs(to-from) < 0.01f) return to;
 		return from + (to-from)*mlt;
 	}
@@ -32,6 +33,14 @@ public class Util{
 		Quaternion q = t.rotation;
 		q.eulerAngles = tar;
 		t.rotation = q;
+	}
+	
+	public static void transform_position_delta(Transform t, Vector3 delta) {
+		Vector3 pos = t.transform.position;
+		pos.x += delta.x;
+		pos.y += delta.y;
+		pos.z += delta.z;
+		t.transform.position = pos;
 	}
 	
 	public static string vec_to_s(Vector3 v) {
