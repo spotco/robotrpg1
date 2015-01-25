@@ -4,6 +4,7 @@ using System.Collections;
 public class GenericSoldierEnemy : BaseEnemy {
 
 	[SerializeField] private Animation _unit_animation;
+	[SerializeField] private GameObject _turret;
 	
 	public override void i_initialize(BattleGameEngine game) {
 		base.i_initialize(game);

@@ -46,6 +46,10 @@ public class BattleGameEngine : MonoBehaviour {
 				to_camera.transform.position = to_camera_position;
                	transition_to_mode(BattleGameEngineMode.TacticalMode,from_camera,to_camera);
             }
+            
+            
+            
+            
 			
 		} else if (_current_mode == BattleGameEngineMode.CameraTransition) {
 			_sceneref._transition_camera.transform.position = Util.sin_lerp_vec(

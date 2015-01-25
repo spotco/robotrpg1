@@ -9,6 +9,7 @@ public class PlayerCharacter : MonoBehaviour {
 	[SerializeField] public GameObject _camera_anchor;
 	[SerializeField] public GameObject _model_anchor;
 	[SerializeField] public Rigidbody _body;
+	[SerializeField] public ViewTargetCollider _targeting_volume;
 	
 	[SerializeField] private Animation _character_animation;
 	public AnimationManager _animation;
@@ -93,7 +94,7 @@ public class PlayerCharacter : MonoBehaviour {
 		return move_ad || move_ws;
 	}
 	
-	private static float MAX_X_ANGLE = 15;
+	private static float MAX_X_ANGLE = 25;
 	private static float FPS_LOOK_SCALE = 3.0f;
 	private Vector3 _xy_angle = Vector3.zero;
 	private void fps_turn(bool moving) {
