@@ -89,15 +89,15 @@ public class BattleGameEngine : MonoBehaviour {
 			float right_mv_scale = 0.0f;
             
             if (Input.GetKey(KeyCode.W)) {
-            	forward_mv_scale = 1.0f;
+            	forward_mv_scale = TACTICAL_MOVE_SCALE;
             	
             } else if (Input.GetKey(KeyCode.S)) {
-            	forward_mv_scale = -1.0f;
+            	forward_mv_scale = -TACTICAL_MOVE_SCALE;
             }
             if (Input.GetKey(KeyCode.A)) {
-            	right_mv_scale = 1.0f;
+            	right_mv_scale = TACTICAL_MOVE_SCALE;
             } else if (Input.GetKey(KeyCode.D)) {
-            	right_mv_scale = -1.0f;
+            	right_mv_scale = -TACTICAL_MOVE_SCALE;
             }
             forward.Scale(Util.valv(forward_mv_scale));
             right.Scale(Util.valv(right_mv_scale));
@@ -120,6 +120,7 @@ public class BattleGameEngine : MonoBehaviour {
             }            
 		}
 	}
+	private static float TACTICAL_MOVE_SCALE = 0.5f;
 	
 	private void freeze_game(bool val) {
 		for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
@@ -136,9 +137,6 @@ public class BattleGameEngine : MonoBehaviour {
 			_sceneref._player.unfreeze();
 		}
 	}
-	
-	
-	private static float TACTICAL_MOVE_SCALE = 0.5f;
 	
 	private BattleGameEngineMode _target_camera_transition_mode = BattleGameEngineMode.PlayerControl;
 	private GameObject _transition_to_camera = null, _transition_from_camera = null;

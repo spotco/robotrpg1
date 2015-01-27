@@ -62,7 +62,7 @@ public class Util {
 		q.eulerAngles = tar;
 		t.rotation = q;
 	}
-	
+
 	public static void transform_position_delta(Transform t, Vector3 delta) {
 		Vector3 pos = t.transform.position;
 		pos.x += delta.x;

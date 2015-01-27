@@ -28,7 +28,7 @@ public class PlayerCharacter : MonoBehaviour {
 	}
 	
 	public bool point_in_fov(Vector3 pos) {
-		return Vector3.Angle(get_forward(),Util.vec_sub(pos,_center.transform.position)) < 35;
+		return Vector3.Angle(get_forward(),Util.vec_sub(pos,_center.transform.position)) < 10;
 	}
 	
 	public void freeze() {
@@ -103,7 +103,7 @@ public class PlayerCharacter : MonoBehaviour {
 	}
 	
 	private static float MAX_X_ANGLE = 25;
-	private static float FPS_LOOK_SCALE = 3.0f;
+	private static float FPS_LOOK_SCALE = 5.0f;
 	private Vector3 _xy_angle = Vector3.zero;
 	private void fps_turn(bool moving) {
 		float mousex_delta = Input.GetAxis("Mouse X");

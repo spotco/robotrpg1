@@ -5,6 +5,7 @@ public class BaseEnemy : MonoBehaviour {
 
 	public virtual void i_initialize(BattleGameEngine game) {
 		_navagent = this.GetComponent<NavMeshAgent>();
+		_current_health = get_max_health();
 	}
 	
 	public virtual void i_update(BattleGameEngine game) {
@@ -12,7 +13,15 @@ public class BaseEnemy : MonoBehaviour {
 	
 	public virtual float get_reticule_scale() { return 1.0f; }
 	public virtual Vector3 get_center() { return Vector3.zero; }
-	
+
+	public float _current_health = 0;
+	public virtual float get_max_health() {
+		return 1.0f;
+	}
+	public virtual string get_name() {
+		return "BaseEnemy";
+	}
+
 	protected NavMeshAgent _navagent;
 	public void move_to(Vector3 pos) {
 		_navagent.SetDestination(pos);

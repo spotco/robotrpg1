@@ -25,6 +25,10 @@ public class GenericSoldierEnemy : BaseEnemy {
 		}
 		
 	}
+
+	public override string get_name() {
+		return "Soldier";
+	}
 	
 	public override float get_reticule_scale() { return 0.5f; }
 	public override Vector3 get_center() { return _center_locator.transform.position; }
