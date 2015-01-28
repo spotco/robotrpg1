@@ -9,8 +9,9 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  - 136: {fileID: 13600000}
   - 195: {fileID: 19500000}
+  - 54: {fileID: 5451786}
+  - 65: {fileID: 6563506}
   m_Layer: 0
   m_Name: enemy_generic_soldier
   m_TagString: Untagged
@@ -312,7 +313,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.622870445, y: 0, z: 0}
+  m_LocalPosition: {x: .546000004, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400036}
@@ -564,6 +565,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 1
+--- !u!54 &5451786
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &6563506
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100000}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: .340833008, y: .728373289, z: .34720847}
+  m_Center: {x: -.00572562218, y: .375709176, z: .00799655914}
 --- !u!111 &11100000
 Animation:
   m_ObjectHideFlags: 1
@@ -600,21 +628,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179a2acda1109464499a2dde510121a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _current_health: 0
   _unit_animation: {fileID: 11100000}
   _center_locator: {fileID: 151542}
---- !u!136 &13600000
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  m_Radius: .239549041
-  m_Height: .664439976
-  m_Direction: 1
-  m_Center: {x: 0, y: .330000013, z: 0}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

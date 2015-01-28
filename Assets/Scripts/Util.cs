@@ -22,6 +22,21 @@ public class Util {
 			drp(from.z,to.z,mlt)
 		);
 	}
+
+	public static Vector3 vec_invert(Vector3 vec) {
+		return new Vector3(-vec.x,-vec.y,-vec.z);
+	}
+
+	public static Vector3 vec_delta(Vector3 vec, float jx = 0, float jy = 0, float jz = 0) {
+		return new Vector3(vec.x+jx,vec.y+jy,vec.z+jz);
+	}
+
+	public static Vector3 vec_any_normal(Vector3 ivec) {
+		Vector3 vec = ivec.normalized;
+		Vector3 add = Vector3.up;
+		if (vec.y == add.y) add = Util.vec_delta(add,0.5f).normalized;
+		return Util.vec_cross(vec,add).normalized;
+	}
 	
 	public static GameObject proto_clone(GameObject proto) {
 		GameObject rtv = ((GameObject)UnityEngine.Object.Instantiate(proto));

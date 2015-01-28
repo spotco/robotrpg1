@@ -7,6 +7,7 @@ public class SceneRef : MonoBehaviour {
 	
 	[SerializeField] public GameObject _transition_camera;
 	[SerializeField] public GameObject _topdown_camera;
+	[SerializeField] public GameObject _particle_root;
 	[SerializeField] public PlayerCharacter _player;
 	[SerializeField] public GameUI _ui;
 	
