@@ -106,6 +106,24 @@ public class BattleGameEngine : MonoBehaviour {
 				).set_collision_normal(
 					bullet_hit_found?bullet_hit.normal:Vector3.up
 				);
+
+
+				if (bullet_hit_found) {
+					Collider[] splash_hits = Physics.OverlapSphere(bullet_hit.point,0.75f);
+					foreach(Collider splash_hit in splash_hits) {
+						BaseEnemy itr_enemy = splash_hit.gameObject.GetComponent<BaseEnemy>();
+						if (itr_enemy != null) {
+							float rnd = Util.rand_range(0,100);
+							if (rnd < 5) {
+								itr_enemy.take_damage(this,25,true);
+							} else if (rnd < 45) {
+								itr_enemy.take_damage(this,0);
+							} else {
+								itr_enemy.take_damage(this,5);
+							}
+						}
+					}
+				}
 			}
 			
 		} else if (_current_mode == BattleGameEngineMode.CameraTransition) {

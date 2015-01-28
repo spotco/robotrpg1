@@ -23,7 +23,10 @@ public class GenericSoldierEnemy : BaseEnemy {
 		} else {
 			_animation.play_anim("Idle");	
 		}
-		
+	}
+
+	public override float get_max_health() {
+		return 50.0f;
 	}
 
 	public override string get_name() {

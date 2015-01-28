@@ -1,0 +1,169 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &134374
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 434374}
+  - 114: {fileID: 11434374}
+  - 114: {fileID: 11493460}
+  m_Layer: 0
+  m_Name: particle_fly_up_damage_text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &134376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 434376}
+  - 33: {fileID: 3334374}
+  - 23: {fileID: 2334374}
+  - 114: {fileID: 11434376}
+  m_Layer: 0
+  m_Name: TextMesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &434374
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134374}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.15956903, y: 4.0773539e-17, z: -6.35446215}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 434376}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!4 &434376
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134376}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -1.62920685e-07}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: .0500000007, y: .0500000007, z: .0500000007}
+  m_Children: []
+  m_Father: {fileID: 434374}
+  m_RootOrder: 0
+--- !u!23 &2334374
+Renderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134376}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_LightmapIndex: 255
+  m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
+  m_Materials:
+  - {fileID: 2100000, guid: 6b0b8ab607702431c8f9634f9be11de0, type: 3}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_UseLightProbes: 0
+  m_LightProbeAnchor: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+--- !u!33 &3334374
+MeshFilter:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134376}
+  m_Mesh: {fileID: 0}
+--- !u!114 &11434374
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07fe5a876d88a4c7f937a93fb0ede26c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11434376
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30d6a10fd450245d8a3aed38efea403d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _privateProperties:
+    text: '300
+
+'
+    font: {fileID: 12800000, guid: 6b0b8ab607702431c8f9634f9be11de0, type: 3}
+    customDetailMaterial: {fileID: 0}
+    fontSize: 15
+    size: 16
+    textAnchor: 2
+    textAlignment: 0
+    lineSpacing: 1
+    fillColorStyle: 1
+    fontColorTop: {r: .948884368, g: 1, b: .0735294223, a: 1}
+    fontColorBottom: {r: 0, g: .958620548, b: 1, a: 1}
+    fillMaterial: {fileID: 0}
+    enableShadow: 0
+    shadowColor: {r: 0, g: 0, b: 0, a: 1}
+    shadowDistance: {x: 0, y: -1, z: 0}
+    enableOutline: 1
+    outlineColor: {r: 0, g: 0, b: 0, a: 1}
+    outLineWidth: .300000012
+    outlineQuality: 0
+    sortingLayerIndex: 0
+    sortingLayerOrder: 0
+    sortingLayerName: Default
+  updateAlwaysOnEnable: 1
+  dontOverrideMaterials: 0
+  GUIChanged: 0
+--- !u!114 &11493460
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134374}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f63049d919ac9498eb6cb8a38a0c86c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _text: {fileID: 11434376}
+  _enemy_damage_color_top: {r: .911764681, g: .547798574, b: .0871539488, a: 1}
+  _enemy_damage_color_bottom: {r: 1, g: 0, b: 0, a: 1}
+  _miss_color_top: {r: .802793562, g: .797469735, b: .867647052, a: 1}
+  _miss_color_bottom: {r: .335748285, g: .341245085, b: .397058845, a: 1}
+  _enemy_crit_color_top: {r: .987728179, g: 1, b: .110294104, a: 1}
+  _enemy_crit_color_bottom: {r: 0, g: .793103218, b: 1, a: 1}
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 134374}
+  m_IsPrefabParent: 1
+  m_IsExploded: 1
