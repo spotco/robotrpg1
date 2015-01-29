@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class BaseEnemy : MonoBehaviour {
 
 	public virtual void i_initialize(BattleGameEngine game) {
@@ -10,16 +11,26 @@ public class BaseEnemy : MonoBehaviour {
 		_alive = true;
 	}
 
+	[SerializeField] private ColliderPointer _collider_pointer;
+	public Collider get_collider() {
+		return _collider_pointer.get_collider();
+	}
+
+	public virtual bool should_remove(BattleGameEngine game) { return true; }
+	public virtual void do_remove(BattleGameEngine game) { }
+
 	private int _hits_taken_count = 0;
 	private int _total_damage_taken_count = 0;
 	private int _crits_count = 0;
 	private int _damage_disp_coalesce_ct = 0;
-	public virtual void take_damage(BattleGameEngine game, int damage, bool crit = false) {
+	public Vector3 _last_damage_dir = Vector3.up;
+	public virtual void take_damage(BattleGameEngine game, int damage, Vector3 direction, bool crit = false) {
 		if (_alive) {
 			_hits_taken_count++;
 			_total_damage_taken_count += damage;
 			if (crit) _crits_count++;
 			_current_health -= damage;
+			_last_damage_dir = direction;
 
 			if (_current_health <= 0) {
 				_alive = false;
@@ -33,7 +44,7 @@ public class BaseEnemy : MonoBehaviour {
 
 	public virtual void i_update(BattleGameEngine game) {
 		_damage_disp_coalesce_ct++;
-		if (_damage_disp_coalesce_ct >= 20) {
+		if (_damage_disp_coalesce_ct >= 10) {
 			_damage_disp_coalesce_ct = 0;
 			if (_hits_taken_count > 0) {
 
@@ -77,13 +88,13 @@ public class BaseEnemy : MonoBehaviour {
 	}
 	
 	public AnimationManager _animation;
-	public void freeze() {
+	public virtual void freeze() {
 		_navagent.updatePosition = false;
 		_navagent.updateRotation = false;
 		_animation.pause_anims();
 	}
 	
-	public void unfreeze() {
+	public virtual void unfreeze() {
 		_navagent.updatePosition = true;
 		_navagent.updateRotation = true;
 		_animation.unpause_anims();

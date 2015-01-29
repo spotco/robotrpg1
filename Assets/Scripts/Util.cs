@@ -197,9 +197,12 @@ public class AnimationManager {
 		_animations_to_time[name] = speed;
 		_animation[name].speed = speed;
 	}
-	public void play_anim(string name, float mult_speed = 1.0f) {
+	public void play_anim(string name, float mult_speed = 1.0f, bool loop = true) {
 		if (_animations_to_time.ContainsKey(name)) {
 			_animation[name].speed = mult_speed*_animations_to_time[name];
+			if (!loop) {
+				_animation[name].wrapMode = WrapMode.Clamp;
+			}
 			_animation.CrossFade(name);
 		} else {
 			Debug.LogError("anim does not contain "+name);

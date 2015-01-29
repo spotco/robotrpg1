@@ -16,7 +16,7 @@ public class SceneRef : MonoBehaviour {
 	
 	public void Start() {
 		inst = this;
-		
+		ShaderManager.i_initialize();
 		_enemies = new List<BaseEnemy>(_enemies_container.GetComponentsInChildren<BaseEnemy>());
 		this.gameObject.AddComponent<BattleGameEngine>().i_initialize(this);
 	}

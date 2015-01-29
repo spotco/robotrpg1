@@ -40,10 +40,7 @@ public class BattleGameEngine : MonoBehaviour {
 			Screen.lockCursor = true;
 
 			_sceneref._player.i_update(this);
-			for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
-				BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
-				itr_enemy.i_update(this);
-			}
+			update_enemies();
 			update_particles();
 			
 			if (Input.GetKeyUp(KeyCode.Tab)) {
@@ -62,7 +59,8 @@ public class BattleGameEngine : MonoBehaviour {
 				RaycastHit closest_hit = new RaycastHit();
 				bool hit_found = false;
 				foreach(RaycastHit hit in hits) {
-					if (hit.collider.gameObject == _sceneref._player.gameObject) continue;
+					if (ColliderPointer.cgetp(hit.collider)._ptr_player == _sceneref._player) continue;
+
 					float dist = Util.vec_dist(_sceneref._player.get_center(),hit.point);
 					if (dist < hit_min_dist) {
 						closest_hit = hit;
@@ -97,29 +95,34 @@ public class BattleGameEngine : MonoBehaviour {
 					Util.vec_sub(target_position,fire_pos),
 					out bullet_hit
 				);
+
 				((BulletParticle)this.add_particle(BulletParticle.BULLET_MECH)).set_start_end_positions(
 					_sceneref._player.get_bullet_pos(),
 					bullet_hit_found?bullet_hit.point:target_position,
 					50
 				).set_do_bullet_hit_effect(
 					bullet_hit_found
+				).set_do_bullet_hole(
+					bullet_hit_found &&
+					(ColliderPointer.cgetp(bullet_hit.collider).get_type() == ColliderPointer.Type.WorldTerrain || ColliderPointer.cgetp(bullet_hit.collider).get_type() == ColliderPointer.Type.WorldProp)
 				).set_collision_normal(
-					bullet_hit_found?bullet_hit.normal:Vector3.up
+					bullet_hit_found ? bullet_hit.normal:Vector3.up
 				);
 
 
 				if (bullet_hit_found) {
 					Collider[] splash_hits = Physics.OverlapSphere(bullet_hit.point,0.75f);
 					foreach(Collider splash_hit in splash_hits) {
-						BaseEnemy itr_enemy = splash_hit.gameObject.GetComponent<BaseEnemy>();
+						BaseEnemy itr_enemy = ColliderPointer.cgetp(splash_hit)._ptr_enemy;
 						if (itr_enemy != null) {
+							Vector3 damage_dir = (itr_enemy.get_center()-_sceneref._player.get_center()).normalized;
 							float rnd = Util.rand_range(0,100);
 							if (rnd < 5) {
-								itr_enemy.take_damage(this,25,true);
+								itr_enemy.take_damage(this,25,damage_dir,true);
 							} else if (rnd < 45) {
-								itr_enemy.take_damage(this,0);
+								itr_enemy.take_damage(this,0,damage_dir);
 							} else {
-								itr_enemy.take_damage(this,5);
+								itr_enemy.take_damage(this,5,damage_dir);
 							}
 						}
 					}
@@ -187,9 +190,8 @@ public class BattleGameEngine : MonoBehaviour {
 				RaycastHit[] hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition));
 				for(int i_hit = 0; i_hit < hits.Length; i_hit++) {
 					RaycastHit itr_hit = hits[i_hit];
-					if (itr_hit.collider.gameObject.GetComponent<BaseEnemy>() != null) {						
-					} else if (itr_hit.collider.gameObject.GetComponent<PlayerCharacter>() != null) {
-					} else if (itr_hit.collider.gameObject.GetComponent<WorldTerrain>() != null) {
+					ColliderPointer colptr = ColliderPointer.cgetp(itr_hit.collider);
+					if (colptr.get_type() == ColliderPointer.Type.WorldTerrain) {
 						for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
 							BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
 							itr_enemy.move_to(new Vector3(itr_hit.point.x+Util.rand_range(-1.5f,1.5f),itr_hit.point.y,itr_hit.point.z+Util.rand_range(-1.5f,1.5f)));	
@@ -207,6 +209,19 @@ public class BattleGameEngine : MonoBehaviour {
 		particle.gameObject.transform.parent = _sceneref._particle_root.transform;
 		_particles.Add(particle);
 		return particle;
+	}
+
+	private void update_enemies() {
+		for (int i_enemy = _sceneref._enemies.Count-1; i_enemy >= 0; i_enemy--) {
+			BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
+			itr_enemy.i_update(this);
+			if (itr_enemy.should_remove(this)) {
+				itr_enemy.do_remove(this);
+				itr_enemy.gameObject.transform.parent = null;
+				Destroy(itr_enemy.gameObject);
+				_sceneref._enemies.RemoveAt(i_enemy);
+			}
+		}
 	}
 
 	private void update_particles() {

@@ -406,8 +406,8 @@ GameObject:
   - 4: {fileID: 400052}
   - 114: {fileID: 11400000}
   - 54: {fileID: 5400000}
-  - 136: {fileID: 13600000}
   - 65: {fileID: 6589482}
+  - 114: {fileID: 11474710}
   m_Layer: 0
   m_Name: player_character
   m_TagString: Untagged
@@ -923,7 +923,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100052}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.57999992, y: 0, z: -1.97000003}
+  m_LocalPosition: {x: -4.07999992, y: 0, z: 2.96000004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400054}
@@ -1187,6 +1187,21 @@ MonoBehaviour:
   _center: {fileID: 100058}
   _muzzle_flare: {fileID: 146692}
   _character_animation: {fileID: 11100000}
+--- !u!114 &11474710
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f2089080c6c4402beb02610c2a48e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ptr_enemy: {fileID: 0}
+  _ptr_terrain: {fileID: 0}
+  _ptr_prop: {fileID: 0}
+  _ptr_player: {fileID: 11400000}
 --- !u!124 &12400000
 Behaviour:
   m_ObjectHideFlags: 1
@@ -1194,19 +1209,6 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100050}
   m_Enabled: 1
---- !u!136 &13600000
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100052}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  m_Radius: .893061996
-  m_Height: .00132396317
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.70000005, z: -.25}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

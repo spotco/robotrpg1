@@ -36,11 +36,18 @@ public class BulletParticle : BaseParticle {
 		_do_hit_effect = val;
 		return this;
 	}
+	private bool _do_bullet_hole = false;
+	public BulletParticle set_do_bullet_hole(bool val) {
+		_do_bullet_hole = val;
+		return this;
+	}
 	public override void do_remove(BattleGameEngine game) {
 		if (_do_hit_effect) {
 			game.add_particle(ParticleSystemWrapperParticle.BULLET_IMPACT).set_position(
 				_end_pos
 			);
+		}
+		if (_do_bullet_hole) {
 			((BulletHoleParticle)game.add_particle(BulletHoleParticle.BULLET_HOLE)).set_position_and_lookat(
 				Vector3.Lerp(_start_pos,_end_pos,(_time_max-0.0005f)/_time_max),
 				Util.vec_add(_end_pos,_collision_normal)

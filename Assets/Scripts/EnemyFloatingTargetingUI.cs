@@ -49,13 +49,15 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 	}
 	
 	public void i_update(BaseEnemy itr_enemy, BattleGameEngine game) {
-		_active = true;
-		float dist = Util.vec_dist(game._sceneref._player.transform.position,itr_enemy.get_center());
-		dist = Mathf.Clamp(dist,_min_dist,_max_dist);
-		float val = (_max_scale-_min_scale) * (1-(dist-_min_dist)/(_max_dist-_min_dist)) + _min_scale;
-		this.transform.localScale = Util.valv(val);
+		if (itr_enemy._alive) {
+			_active = true;
+			float dist = Util.vec_dist(game._sceneref._player.transform.position,itr_enemy.get_center());
+			dist = Mathf.Clamp(dist,_min_dist,_max_dist);
+			float val = (_max_scale-_min_scale) * (1-(dist-_min_dist)/(_max_dist-_min_dist)) + _min_scale;
+			this.transform.localScale = Util.valv(val);
 
-		health_bar_fill_pct(itr_enemy._current_health/itr_enemy.get_max_health());
+			health_bar_fill_pct(itr_enemy._current_health/itr_enemy.get_max_health());
+		}
 	}
 	
 	public void fadeout() {

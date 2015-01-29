@@ -11,7 +11,6 @@ GameObject:
   - 114: {fileID: 11400000}
   - 195: {fileID: 19500000}
   - 54: {fileID: 5451786}
-  - 65: {fileID: 6563506}
   m_Layer: 0
   m_Name: enemy_generic_soldier
   m_TagString: Untagged
@@ -208,6 +207,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 400026}
   - 137: {fileID: 13700000}
+  - 65: {fileID: 6576814}
+  - 114: {fileID: 11476814}
   m_Layer: 0
   m_Name: B_Pelvis
   m_TagString: Untagged
@@ -313,7 +314,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .546000004, y: 0, z: 0}
+  m_LocalPosition: {x: 2.30999994, y: 0, z: 5.80999994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400036}
@@ -580,18 +581,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &6563506
+--- !u!65 &6576814
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 100000}
+  m_GameObject: {fileID: 100026}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .340833008, y: .728373289, z: .34720847}
-  m_Center: {x: -.00572562218, y: .375709176, z: .00799655914}
+  m_Size: {x: 1.89922678, y: .555612981, z: .622093081}
+  m_Center: {x: -.0271107648, y: -.0526609756, z: .0169680677}
 --- !u!111 &11100000
 Animation:
   m_ObjectHideFlags: 1
@@ -628,9 +629,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 179a2acda1109464499a2dde510121a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collider_pointer: {fileID: 11476814}
+  _last_damage_dir: {x: 0, y: 1, z: 0}
   _current_health: 0
   _unit_animation: {fileID: 11100000}
   _center_locator: {fileID: 151542}
+  _mesh: {fileID: 13700000}
+--- !u!114 &11476814
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23f2089080c6c4402beb02610c2a48e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ptr_enemy: {fileID: 11400000}
+  _ptr_terrain: {fileID: 0}
+  _ptr_prop: {fileID: 0}
+  _ptr_player: {fileID: 0}
 --- !u!137 &13700000
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
