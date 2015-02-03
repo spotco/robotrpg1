@@ -75,7 +75,7 @@ public class BattleGameEngine : MonoBehaviour {
 				((BulletParticle)this.add_particle(BulletParticle.BULLET_MECH)).set_start_end_positions(
 					fire_pos,
 					bullet_hit_found?bullet_hit.point:target_position,
-					50
+					75
 				).set_do_bullet_hit_effect(
 					bullet_hit_found
 				).set_do_bullet_hole(
@@ -179,7 +179,6 @@ public class BattleGameEngine : MonoBehaviour {
 	}
 
 	public BaseParticle add_particle(string name) {
-
 		BaseParticle particle = ((GameObject)Instantiate(Resources.Load(name))).GetComponent<BaseParticle>();
 		particle.i_initialize(this);
 		particle.gameObject.transform.parent = _sceneref._particle_root.transform;

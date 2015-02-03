@@ -157,7 +157,7 @@ public class Util {
 		}
 	}
 	
-	public static float sig(float n) {
+	public static int sig(float n) {
 		if (n > 0) {
 			return 1;
 		} else if (n < 0) {

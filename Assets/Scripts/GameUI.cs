@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System;
+using System.Linq;
 
 public class GameUI : MonoBehaviour {
 	
 	[SerializeField] public GameObject _proto_target_reticule;
+	[SerializeField] public GameObject _target_reticule_root;
 	
 	public void i_initialize(BattleGameEngine game) {
 		_proto_target_reticule.gameObject.SetActive(false);
@@ -70,7 +73,16 @@ public class GameUI : MonoBehaviour {
 		}
 		_ui_infopanel_rects.Clear();
 
+		var sort_targeting_uis = _target_reticule_root.GetComponentsInChildren<EnemyFloatingTargetingUI>(false).ToList();
+		sort_targeting_uis.Sort((EnemyFloatingTargetingUI a, EnemyFloatingTargetingUI b)=> {
+			return Util.sig(b.get_sort_value() - a.get_sort_value());
+		});
+		for (int i = 0; i < sort_targeting_uis.Count; i++) {
+			sort_targeting_uis[i].transform.SetSiblingIndex(i);
+		}
+		
 		update_aim_reticule();
+		update_particles();
 	}
 
 	private float _aim_reticule_theta = 0;
@@ -95,6 +107,29 @@ public class GameUI : MonoBehaviour {
 		Color neu_color = _aim_reticule_image.color;
 		neu_color.a = _aim_reticule_cur_alpha;
 		_aim_reticule_image.color = neu_color;
+	}
+
+	[SerializeField] public GameObject _particle_root;
+	[NonSerialized] public List<BaseUIParticle> _particles = new List<BaseUIParticle>();
+	public BaseUIParticle add_particle(string name) {
+		BaseUIParticle particle = ((GameObject)Instantiate(Resources.Load(name))).GetComponent<BaseUIParticle>();
+		particle.i_initialize(this);
+		particle.gameObject.transform.parent = _particle_root.transform;
+		_particles.Add(particle);
+		return particle;
+	}
+
+	private void update_particles() {
+		for (int i_particle = _particles.Count-1; i_particle >= 0; i_particle--) {
+			BaseUIParticle itr_particle = _particles[i_particle];
+			itr_particle.i_update(this);
+			if (itr_particle.should_remove(this)) {
+				itr_particle.do_remove(this);
+				itr_particle.gameObject.transform.parent = null;
+				Destroy(itr_particle.gameObject);
+				_particles.RemoveAt(i_particle);
+			}
+		}
 	}
 	
 }

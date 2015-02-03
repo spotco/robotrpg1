@@ -49,20 +49,22 @@ public class BaseEnemy : MonoBehaviour {
 			if (_hits_taken_count > 0) {
 
 				Vector3 text_pos = Util.vec_delta(this.get_center(),Util.rand_range(-0.25f,0.25f),Util.rand_range(-0.25f,0.25f)+0.75f,Util.rand_range(-0.25f,0.25f));
-				FlyUpDamageTextParticle.Mode text_mode = FlyUpDamageTextParticle.Mode.EnemyDamage;
+				FlyUpDamageTextUIParticle.Mode text_mode = FlyUpDamageTextUIParticle.Mode.EnemyDamage;
 				string val = string.Format("{0}",_total_damage_taken_count);
 				if (_total_damage_taken_count == 0) {
-					text_mode = FlyUpDamageTextParticle.Mode.Miss;
+					text_mode = FlyUpDamageTextUIParticle.Mode.Miss;
 					val = "Miss";
 				} else if (_crits_count > 0) {
-					text_mode = FlyUpDamageTextParticle.Mode.EnemyCrit;
+					text_mode = FlyUpDamageTextUIParticle.Mode.EnemyCrit;
 				}
-				
-				((FlyUpDamageTextParticle)game.add_particle(FlyUpDamageTextParticle.DAMAGE_TEXT)).start(
-					text_pos,
+
+				((FlyUpDamageTextUIParticle)game._sceneref._ui.add_particle(FlyUpDamageTextUIParticle.DAMAGE_TEXT)).start(
+					Camera.main.WorldToScreenPoint(text_pos),
 					val,
 					text_mode
 				);
+
+
 				_hits_taken_count = 0;
 				_total_damage_taken_count = 0;
 				_crits_count = 0;

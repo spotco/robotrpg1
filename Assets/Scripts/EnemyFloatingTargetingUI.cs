@@ -27,7 +27,7 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 
 	[SerializeField] private Text _name_text;
 
-	private float _max_scale = 2.0f, _min_scale = 0.5f, _min_dist = 0.1f, _max_dist = 40.0f;
+	private float _max_scale = 2.0f, _min_scale = 0.75f, _min_dist = 0.1f, _max_dist = 40.0f;
 
 	public EnemyFloatingTargetingUI i_initialize(BaseEnemy itr_enemy) {
 		_current_mode = EnemyFloatingTargetingUIMode.FadeIn;
@@ -39,6 +39,7 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 		update_reticule_in_anim();
 
 		_infodisp_root.SetActive(false);
+		_line_to_bar.gameObject.SetActive(false);
 		_name_text.text = itr_enemy.get_name();
 		health_bar_fill_pct(itr_enemy._current_health/itr_enemy.get_max_health());
 
@@ -73,6 +74,10 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 		rt.localPosition = cur_local_pos;
 
 		return rtv;
+	}
+
+	public float get_sort_value() {
+		return _infodisp_root.GetComponent<RectTransform>().position.y;
 	}
 
 	private bool _enemy_alive = true;
@@ -121,25 +126,40 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 	private void health_bar_fill_pct(float pct) {
 		_bar_fill.fillAmount = pct;
 	}
+
+	[SerializeField] private RectTransform _line_to_bar;
+	private bool update_line_to_bar() {
+		Vector3 delta = Util.vec_sub(_infodisp_root.transform.localPosition,_line_to_bar.transform.localPosition);
+		Vector2 size = _line_to_bar.sizeDelta;
+		size.y = delta.magnitude;
+		_line_to_bar.sizeDelta = size;
+		Util.transform_set_euler_world(_line_to_bar,new Vector3(0,0,Mathf.Atan2(delta.y,delta.x)*Util.rad2deg - 90));
+		return delta.magnitude > 20;
+	}
 	
 	public void Update() {
 		if (_current_mode == EnemyFloatingTargetingUIMode.FadeIn) {
 			_reticule_anim_t = Mathf.Clamp(_reticule_anim_t-0.1f,0,1);
 			if (_reticule_anim_t <= 0) _current_mode = EnemyFloatingTargetingUIMode.Idle;
 			_infodisp_root.SetActive(false);
+			_line_to_bar.gameObject.SetActive(false);
 
 		} else if (_current_mode == EnemyFloatingTargetingUIMode.Idle) {
 			_infodisp_root.SetActive(true);
+			_line_to_bar.gameObject.SetActive(true);
 
 		} else if (_current_mode == EnemyFloatingTargetingUIMode.FadeOut) {
 			_reticule_anim_t = Mathf.Clamp(_reticule_anim_t+0.1f,0,1);
 			_infodisp_root.SetActive(false);
+			_line_to_bar.gameObject.SetActive(false);
 		}
 		update_reticule_in_anim();
 
 		RectTransform rt = _infodisp_root.GetComponent<RectTransform>();
-		_current_infodisp_offset = Util.vec_drp(_current_infodisp_offset,_target_infodisp_offset,0.5f);
+		_current_infodisp_offset = Util.vec_drp(_current_infodisp_offset,_target_infodisp_offset,0.85f);
 		rt.localPosition = new Vector3(_preferred_local_position.x+_current_infodisp_offset.x,_preferred_local_position.y+_current_infodisp_offset.y,0);
+
+		_line_to_bar.gameObject.SetActive(update_line_to_bar() && _line_to_bar.gameObject.activeSelf);
 	}
 
 }

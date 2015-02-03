@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 [AddComponentMenu("UI/Effects/Gradient")]
 public class Gradient : BaseVertexEffect {
-	[SerializeField]
-	private Color32 topColor = Color.white;
-	[SerializeField]
-	private Color32 bottomColor = Color.black;
+	[SerializeField] public Color32 topColor = Color.white;
+	[SerializeField] public Color32 bottomColor = Color.black;
 	
 	public override void ModifyVertices(List<UIVertex> vertexList) {
 		if (!IsActive()) {
@@ -16,6 +14,7 @@ public class Gradient : BaseVertexEffect {
 		}
 		
 		int count = vertexList.Count;
+		if (count <= 0) return;
 		float bottomY = vertexList[0].position.y;
 		float topY = vertexList[0].position.y;
 		
