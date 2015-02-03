@@ -13,6 +13,7 @@ public class PlayerCharacter : MonoBehaviour {
 	[SerializeField] private Rigidbody _body;
 	[SerializeField] private GameObject _center;
 	[SerializeField] private GameObject _muzzle_flare;
+	[SerializeField] private GameObject _hud_target_tracker;
 	
 	[SerializeField] private Animation _character_animation;
 	public AnimationManager _animation;
@@ -25,9 +26,29 @@ public class PlayerCharacter : MonoBehaviour {
 		_animation.add_anim("Walk_Right",1.75f);
 		_animation.play_anim("Idle");
 	}
+
+	private Vector3 _hud_targeting_pos = Vector3.zero;
+	private bool _hud_targeting_pos_dirty = true;
+	public Vector3 get_targeted_position() {
+		if (_hud_targeting_pos_dirty) {
+			RaycastHit closest_hit;
+			Vector3 target_dir = Util.vec_sub(_hud_target_tracker.transform.position,_follow_camera.transform.position).normalized;
+			bool hit_found = Physics.Raycast(_hud_target_tracker.transform.position,target_dir, out closest_hit);
+			if (hit_found) {
+				_hud_targeting_pos = closest_hit.point;
+			} else {
+				_hud_targeting_pos = Util.vec_add(
+					_hud_target_tracker.transform.position,
+					Util.vec_scale(target_dir,100.0f)
+				);
+			}
+			_hud_targeting_pos_dirty = false;
+		}
+		return _hud_targeting_pos;
+	}
 	
 	public Vector3 get_forward() {
-		return Util.vec_sub(_center.transform.position,_follow_camera.transform.position).normalized;
+		return Util.vec_sub(get_targeted_position(),get_bullet_pos()).normalized;
 	}
 
 	public Vector3 get_center() {
@@ -38,8 +59,8 @@ public class PlayerCharacter : MonoBehaviour {
 		return _turret_locator.transform.position;
 	}
 	
-	public bool point_in_fov(Vector3 pos) {
-		return Vector3.Angle(get_forward(),Util.vec_sub(pos,_center.transform.position)) < 10;
+	public float point_angle_from_forward(Vector3 pos) {
+		return Vector3.Angle(get_forward(),Util.vec_sub(pos,_center.transform.position));
 	}
 	
 	public void freeze() {
@@ -55,6 +76,7 @@ public class PlayerCharacter : MonoBehaviour {
 	}
 	
 	public void i_update(BattleGameEngine game_engine) {
+		_hud_targeting_pos_dirty = true;
 		bool moving = move();
 		fps_turn(moving);
 

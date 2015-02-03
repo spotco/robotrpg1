@@ -15,13 +15,13 @@ public class GameUI : MonoBehaviour {
 	public void i_update(BattleGameEngine game) {
 	
 		foreach(EnemyFloatingTargetingUI fui in _objid_to_targetingui.Values) fui._active = false;
-		
+
 		foreach(BaseEnemy itr_enemy in game._sceneref._enemies) {
 			if (_objid_to_targetingui.ContainsKey(itr_enemy.gameObject.GetInstanceID())) {
 				EnemyFloatingTargetingUI fui = _objid_to_targetingui[itr_enemy.gameObject.GetInstanceID()];
 				fui.gameObject.transform.position = Camera.main.WorldToScreenPoint(itr_enemy.get_center());
 			}
-			if (!game._sceneref._player.point_in_fov(itr_enemy.transform.position)) continue;
+			if (game._sceneref._player.point_angle_from_forward(itr_enemy.transform.position) > 10) continue;
 			if (!_objid_to_targetingui.ContainsKey(itr_enemy.gameObject.GetInstanceID())) {
 				_objid_to_targetingui[itr_enemy.gameObject.GetInstanceID()] = Util.proto_clone(_proto_target_reticule).GetComponent<EnemyFloatingTargetingUI>().i_initialize(itr_enemy);
 			}

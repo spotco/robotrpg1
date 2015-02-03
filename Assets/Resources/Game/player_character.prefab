@@ -455,7 +455,7 @@ GameObject:
   - 4: {fileID: 400058}
   - 54: {fileID: 5448264}
   m_Layer: 0
-  m_Name: center
+  m_Name: hud_target_tracker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -558,6 +558,22 @@ GameObject:
   - 199: {fileID: 19946690}
   m_Layer: 0
   m_Name: muzzle_flare
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &187174
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 487174}
+  - 54: {fileID: 5487174}
+  m_Layer: 0
+  m_Name: center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -911,7 +927,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100050}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -.0799999982, z: -5.75}
+  m_LocalPosition: {x: 0, y: 0, z: -5.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400054}
@@ -940,8 +956,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 3.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 400058}
+  - {fileID: 487174}
   - {fileID: 400050}
+  - {fileID: 400058}
   m_Father: {fileID: 400052}
   m_RootOrder: 0
 --- !u!4 &400056
@@ -964,11 +981,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400054}
-  m_RootOrder: 0
+  m_RootOrder: 2
 --- !u!4 &446680
 Transform:
   m_ObjectHideFlags: 1
@@ -1046,6 +1063,18 @@ Transform:
   - {fileID: 446680}
   m_Father: {fileID: 400016}
   m_RootOrder: 0
+--- !u!4 &487174
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187174}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -.99000001, z: -.540000021}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 400054}
+  m_RootOrder: 0
 --- !u!4 &489482
 Transform:
   m_ObjectHideFlags: 1
@@ -1120,6 +1149,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!54 &5487174
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 187174}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: .0500000007
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &6589482
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -1184,8 +1228,9 @@ MonoBehaviour:
   _model_anchor: {fileID: 100056}
   _turret_locator: {fileID: 189482}
   _body: {fileID: 5400000}
-  _center: {fileID: 100058}
+  _center: {fileID: 187174}
   _muzzle_flare: {fileID: 146692}
+  _hud_target_tracker: {fileID: 100058}
   _character_animation: {fileID: 11100000}
 --- !u!114 &11474710
 MonoBehaviour:

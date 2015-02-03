@@ -53,35 +53,12 @@ public class BattleGameEngine : MonoBehaviour {
                	transition_to_mode(BattleGameEngineMode.TacticalMode,from_camera,to_camera);
             }
             
+			//todo -- lock on to only closest enemy
 			if (Input.GetMouseButton(0)) {
-				RaycastHit[] hits = Physics.RaycastAll(_sceneref._player.get_center(),_sceneref._player.get_forward());
-				float hit_min_dist = float.PositiveInfinity;
-				RaycastHit closest_hit = new RaycastHit();
-				bool hit_found = false;
-				foreach(RaycastHit hit in hits) {
-					if (ColliderPointer.cgetp(hit.collider)._ptr_player == _sceneref._player) continue;
-
-					float dist = Util.vec_dist(_sceneref._player.get_center(),hit.point);
-					if (dist < hit_min_dist) {
-						closest_hit = hit;
-						hit_min_dist = dist;
-						hit_found = true;
-					}
-				}
-
-				float hit_dist;
 				float max_variance_angle = 5.0f;
 				Vector3 fire_pos = _sceneref._player.get_bullet_pos();
-				Vector3 target_location;
-				if (hit_found) {
-					hit_dist = Util.vec_dist(closest_hit.point,fire_pos);
-					target_location = closest_hit.point;
-				} else {
-					hit_dist = 300;
-					target_location = Util.vec_add(_sceneref._player.get_bullet_pos(),
-						Util.vec_scale(_sceneref._player.get_forward(),hit_dist)
-					);
-				}
+				Vector3 target_location = _sceneref._player.get_targeted_position();
+				float hit_dist = Util.vec_dist(fire_pos,target_location);
 				float max_variance = hit_dist * Mathf.Tan(Util.deg2rad*max_variance_angle);
 
 				Vector3 target_dir = Util.vec_sub(target_location,fire_pos);
@@ -97,7 +74,7 @@ public class BattleGameEngine : MonoBehaviour {
 				);
 
 				((BulletParticle)this.add_particle(BulletParticle.BULLET_MECH)).set_start_end_positions(
-					_sceneref._player.get_bullet_pos(),
+					fire_pos,
 					bullet_hit_found?bullet_hit.point:target_position,
 					50
 				).set_do_bullet_hit_effect(
