@@ -53,7 +53,6 @@ public class BattleGameEngine : MonoBehaviour {
                	transition_to_mode(BattleGameEngineMode.TacticalMode,from_camera,to_camera);
             }
             
-			//todo -- lock on to only closest enemy
 			if (Input.GetMouseButton(0)) {
 				float max_variance_angle = 5.0f;
 				Vector3 fire_pos = _sceneref._player.get_bullet_pos();

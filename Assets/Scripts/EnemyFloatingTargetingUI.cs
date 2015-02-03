@@ -15,6 +15,10 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 	[SerializeField] private RectTransform _reticule_transform;
 	[SerializeField] private Image _reticule_image;
 	[SerializeField] private GameObject _infodisp_root;
+	[SerializeField] private Text _damage_text;
+	[SerializeField] private Text _distance_text;
+
+	[SerializeField] private Vector3 _preferred_local_position;
 
 	private float _reticule_anim_t = 0; //1 out, 0 in
 	private float _retic_target_alpha = 0;
@@ -38,7 +42,48 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 		_name_text.text = itr_enemy.get_name();
 		health_bar_fill_pct(itr_enemy._current_health/itr_enemy.get_max_health());
 
+		_damage_text.text = "";
+		_distance_text.text = "";
+
 		return this;
+	}
+
+	public Vector3 get_infodisp_preferred_world_position() {
+		RectTransform rt = _infodisp_root.GetComponent<RectTransform>();
+		Vector3 cur_local_pos = rt.localPosition;
+		rt.localPosition = _preferred_local_position;
+		Vector3 rtv = rt.position;
+		rt.localPosition = cur_local_pos;
+		return rtv;
+	}
+
+	public Rect get_infodisp_size() {
+		RectTransform rt = _infodisp_root.GetComponent<RectTransform>();
+		Vector3 cur_local_pos = rt.localPosition;
+		rt.localPosition = _preferred_local_position;
+
+		Vector3[] corners = new Vector3[4];
+		rt.GetWorldCorners(corners);
+		float min_x = Mathf.Min(corners[0].x,corners[1].x,corners[2].x,corners[3].x);
+		float max_x = Mathf.Max(corners[0].x,corners[1].x,corners[2].x,corners[3].x);
+		float min_y = Mathf.Min(corners[0].y,corners[1].y,corners[2].y,corners[3].y);
+		float max_y = Mathf.Max(corners[0].y,corners[1].y,corners[2].y,corners[3].y);
+		Rect rtv = new Rect(min_x,max_y,max_x-min_x,max_y-min_y);
+
+		rt.localPosition = cur_local_pos;
+
+		return rtv;
+	}
+
+	private bool _enemy_alive = true;
+	public bool infodisp_reposition_active() {
+		return _enemy_alive;
+	}
+
+	private Vector3 _target_infodisp_offset = Vector3.zero;
+	private Vector3 _current_infodisp_offset = Vector3.zero;
+	public void set_offset(float offset_x, float offset_y) {
+		_target_infodisp_offset = new Vector3(offset_x,offset_y);
 	}
 
 	private void update_reticule_in_anim() {
@@ -57,7 +102,11 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 			this.transform.localScale = Util.valv(val);
 
 			health_bar_fill_pct(itr_enemy._current_health/itr_enemy.get_max_health());
+
+			_damage_text.text = string.Format("{0}/{1}",itr_enemy._current_health,itr_enemy.get_max_health());
+			_distance_text.text = string.Format("{0:F1}m",dist);
 		}
+		_enemy_alive = itr_enemy._alive;
 	}
 	
 	public void fadeout() {
@@ -67,21 +116,10 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 	public bool should_remove() {
 		return (_current_mode == EnemyFloatingTargetingUIMode.FadeOut) && (_reticule_anim_t >= 1);
 	}
-
-	[SerializeField] private GameObject _bar_fill_obj;
-	[SerializeField] private RectTransform _bar_fill;
-	private static float BAR_MAX = 150;
-	private static float BAR_MIN = 13;
+	
+	[SerializeField] private Image _bar_fill;
 	private void health_bar_fill_pct(float pct) {
-		float tar_wid = pct*BAR_MAX;
-		if (tar_wid < BAR_MIN) {
-			_bar_fill_obj.SetActive(false);
-		} else {
-			_bar_fill_obj.SetActive(true);
-			Vector2 prev_size = _bar_fill.sizeDelta;
-			prev_size.x = tar_wid;
-			_bar_fill.sizeDelta = prev_size;
-		}
+		_bar_fill.fillAmount = pct;
 	}
 	
 	public void Update() {
@@ -98,6 +136,10 @@ public class EnemyFloatingTargetingUI : MonoBehaviour {
 			_infodisp_root.SetActive(false);
 		}
 		update_reticule_in_anim();
+
+		RectTransform rt = _infodisp_root.GetComponent<RectTransform>();
+		_current_infodisp_offset = Util.vec_drp(_current_infodisp_offset,_target_infodisp_offset,0.5f);
+		rt.localPosition = new Vector3(_preferred_local_position.x+_current_infodisp_offset.x,_preferred_local_position.y+_current_infodisp_offset.y,0);
 	}
 
 }

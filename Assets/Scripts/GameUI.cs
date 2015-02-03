@@ -12,9 +12,11 @@ public class GameUI : MonoBehaviour {
 	
 	private Dictionary<int,EnemyFloatingTargetingUI> _objid_to_targetingui = new Dictionary<int, EnemyFloatingTargetingUI>();
 	private List<int> _objsids_to_remove = new List<int>();
+	private List<Rect> _ui_infopanel_rects = new List<Rect>();
 	public void i_update(BattleGameEngine game) {
-	
-		foreach(EnemyFloatingTargetingUI fui in _objid_to_targetingui.Values) fui._active = false;
+		foreach(EnemyFloatingTargetingUI fui in _objid_to_targetingui.Values) {
+			fui._active = false;
+		}
 
 		foreach(BaseEnemy itr_enemy in game._sceneref._enemies) {
 			if (_objid_to_targetingui.ContainsKey(itr_enemy.gameObject.GetInstanceID())) {
@@ -37,6 +39,36 @@ public class GameUI : MonoBehaviour {
 			_objid_to_targetingui.Remove(key);
 		}
 		_objsids_to_remove.Clear();
+
+
+		foreach(EnemyFloatingTargetingUI fui in _objid_to_targetingui.Values) {
+			if (!fui.infodisp_reposition_active()) continue;
+			Rect fui_rect = fui.get_infodisp_size();
+			bool intersect_ok = false;
+			float offset_y = 0;
+			int intersect_test_ct = 0;
+			while (!intersect_ok) {
+				bool intersection_found = false;
+				foreach(Rect r in _ui_infopanel_rects) {
+					if (fui_rect.Overlaps(r)) {
+						intersection_found = true;
+						break;
+					}
+				}
+				if (intersection_found) {
+					float OVERLAP_TEST_ITR = 15.0f;
+					offset_y += OVERLAP_TEST_ITR;
+					fui_rect.y += OVERLAP_TEST_ITR;
+				} else {
+					intersect_ok = true;
+				}
+				intersect_test_ct++;
+				if (intersect_test_ct > 50) intersect_ok = true;
+			}
+			fui.set_offset(0,offset_y);
+			_ui_infopanel_rects.Add(fui_rect);
+		}
+		_ui_infopanel_rects.Clear();
 
 		update_aim_reticule();
 	}
