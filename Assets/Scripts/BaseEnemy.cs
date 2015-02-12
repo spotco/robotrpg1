@@ -40,7 +40,9 @@ public class BaseEnemy : MonoBehaviour {
 	}
 
 	[NonSerialized] public bool _alive = true;
-	public virtual void on_death(BattleGameEngine game) {}
+	public virtual void on_death(BattleGameEngine game) {
+		game._sceneref._path_renderer.clear_path(this.GetInstanceID());
+	}
 
 	public virtual void i_update(BattleGameEngine game) {
 		_damage_disp_coalesce_ct++;
@@ -72,6 +74,26 @@ public class BaseEnemy : MonoBehaviour {
 			}
 		}
 	}
+
+	private bool _path_dirty = false;
+	private Vector3 _last_vec_mid = Vector3.zero;
+	public void frozen_update(BattleGameEngine game) {
+		if (_navagent.path.status != NavMeshPathStatus.PathInvalid) {
+			Vector3 tmp_vec_mid = _navagent.path.corners[_navagent.path.corners.Length/2];
+			if (!_navagent.pathPending && _navagent.hasPath && (_path_dirty || tmp_vec_mid != _last_vec_mid)) {
+				update_path_render(game);
+				_last_vec_mid = tmp_vec_mid;
+			}
+		}
+	}
+
+	private void update_path_render(BattleGameEngine game) {
+		if (_navagent.path.status != NavMeshPathStatus.PathInvalid) {
+			_path_dirty = false;
+			game._sceneref._path_renderer.clear_path(this.GetInstanceID());
+			game._sceneref._path_renderer.id_draw_path(this.GetInstanceID(),transform.position,_navagent.path.corners);
+		}
+	}
 	
 	public virtual float get_reticule_scale() { return 1.0f; }
 	public virtual Vector3 get_center() { return Vector3.zero; }
@@ -85,21 +107,30 @@ public class BaseEnemy : MonoBehaviour {
 	}
 
 	protected NavMeshAgent _navagent;
-	public void move_to(Vector3 pos) {
-		_navagent.SetDestination(pos);
+	public void move_to(BattleGameEngine game, Vector3 pos) {
+		if (_navagent.enabled) {
+			bool tmp_frozen = _frozen;
+			if (tmp_frozen) this.unfreeze(game);
+			_navagent.SetDestination(pos);
+			_path_dirty = true;
+			if (tmp_frozen) this.freeze(game);
+		}
 	}
 	
 	public AnimationManager _animation;
-	public virtual void freeze() {
-		_navagent.updatePosition = false;
-		_navagent.updateRotation = false;
+	private bool _frozen = false;
+	public virtual void freeze(BattleGameEngine game) {
+		_frozen = true;
+		if (_navagent.enabled) _navagent.Stop();
 		_animation.pause_anims();
+		update_path_render(game);
 	}
 	
-	public virtual void unfreeze() {
-		_navagent.updatePosition = true;
-		_navagent.updateRotation = true;
+	public virtual void unfreeze(BattleGameEngine game) {
+		_frozen = false;
+		if (_navagent.enabled) _navagent.Resume();
 		_animation.unpause_anims();
+		game._sceneref._path_renderer.clear_path(this.GetInstanceID());
 	}
 
 }

@@ -38,6 +38,7 @@ public class BattleGameEngine : MonoBehaviour {
 		if (_current_mode == BattleGameEngineMode.PlayerControl) {
 			Screen.showCursor = false;
 			Screen.lockCursor = true;
+			_sceneref._path_renderer.gameObject.SetActive(false);
 
 			_sceneref._player.i_update(this);
 			update_enemies();
@@ -108,6 +109,7 @@ public class BattleGameEngine : MonoBehaviour {
 		} else if (_current_mode == BattleGameEngineMode.CameraTransition) {
 			Screen.showCursor = false;
 			Screen.lockCursor = true;
+			_sceneref._path_renderer.gameObject.SetActive(false);
 
 			_sceneref._transition_camera.transform.position = Util.sin_lerp_vec(
 				_transition_from_camera.transform.position,
@@ -135,6 +137,9 @@ public class BattleGameEngine : MonoBehaviour {
 		} else if (_current_mode == BattleGameEngineMode.TacticalMode) {
 			Screen.showCursor = true;
 			Screen.lockCursor = false;
+			_sceneref._path_renderer.gameObject.SetActive(true);
+
+			foreach(BaseEnemy itr in _sceneref._enemies) itr.frozen_update(this);
 
 			if (Input.GetKeyUp(KeyCode.Tab)) {
                 transition_to_mode(BattleGameEngineMode.PlayerControl,_sceneref._topdown_camera,_sceneref._player._follow_camera);
@@ -170,7 +175,7 @@ public class BattleGameEngine : MonoBehaviour {
 					if (colptr.get_type() == ColliderPointer.Type.WorldTerrain) {
 						for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
 							BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
-							itr_enemy.move_to(new Vector3(itr_hit.point.x+Util.rand_range(-1.5f,1.5f),itr_hit.point.y,itr_hit.point.z+Util.rand_range(-1.5f,1.5f)));	
+							itr_enemy.move_to(this, new Vector3(itr_hit.point.x+Util.rand_range(-1.5f,1.5f),itr_hit.point.y,itr_hit.point.z+Util.rand_range(-1.5f,1.5f)));	
 						}
 					}
 				}
@@ -216,9 +221,9 @@ public class BattleGameEngine : MonoBehaviour {
 		for (int i_enemy = 0; i_enemy < _sceneref._enemies.Count; i_enemy++) {
 			BaseEnemy itr_enemy = _sceneref._enemies[i_enemy];
 			if (val) {
-				itr_enemy.freeze();
+				itr_enemy.freeze(this);
 			} else {
-				itr_enemy.unfreeze();
+				itr_enemy.unfreeze(this);
 			}	
 		}
 		for (int i_particle = _particles.Count-1; i_particle >= 0; i_particle--) {

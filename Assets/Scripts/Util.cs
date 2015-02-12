@@ -220,4 +220,27 @@ public class AnimationManager {
 	}
 }
 
+public class MultiList<TKey, TValue> {
+	public Dictionary<TKey,List<TValue>> _key_to_list = new Dictionary<TKey, List<TValue>>();
+	public int count_of(TKey key) {
+		if (!_key_to_list.ContainsKey(key)) _key_to_list[key] = new List<TValue>();
+		return _key_to_list[key].Count;
+	}
+	public void add(TKey key, TValue val) {
+		if (!_key_to_list.ContainsKey(key)) _key_to_list[key] = new List<TValue>();
+		_key_to_list[key].Add(val);
+	}
+	public void clear(TKey key) {
+		if (!_key_to_list.ContainsKey(key)) _key_to_list[key] = new List<TValue>();
+		_key_to_list[key].Clear();
+	}
+	public List<TValue> list(TKey key) {
+		if (!_key_to_list.ContainsKey(key)) _key_to_list[key] = new List<TValue>();
+		return _key_to_list[key];
+	}
+	public List<TKey> keys() {
+		return new List<TKey>(_key_to_list.Keys);
+	}
+}
+
 

@@ -12,6 +12,8 @@ public class SceneRef : MonoBehaviour {
 	[SerializeField] public GameUI _ui;
 	
 	[SerializeField] private GameObject _enemies_container;
+	[SerializeField] public PathRenderer _path_renderer;
+
 	public List<BaseEnemy> _enemies;
 	
 	public void Start() {

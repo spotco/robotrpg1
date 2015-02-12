@@ -16,7 +16,7 @@ public class GenericSoldierEnemy : BaseEnemy {
 		_animation.add_anim("Run",1.0f);
 		_animation.add_anim("Death_2",1.0f);
 		_animation.play_anim("Idle");			
-		this.move_to(this.transform.position);
+		this.move_to(game,this.transform.position);
 	}
 
 	public override void on_death(BattleGameEngine game) {
@@ -59,13 +59,13 @@ public class GenericSoldierEnemy : BaseEnemy {
 	public override float get_reticule_scale() { return 0.5f; }
 	public override Vector3 get_center() { return _center_locator.transform.position; }
 
-	public override void freeze() {
+	public override void freeze(BattleGameEngine game) {
 		rigidbody.Sleep();
-		base.freeze();
+		base.freeze(game);
 	}
-	public override void unfreeze() {
+	public override void unfreeze(BattleGameEngine game) {
 		rigidbody.WakeUp();
-		base.unfreeze();
+		base.unfreeze(game);
 	}
 
 }
